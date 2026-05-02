@@ -25,12 +25,33 @@
         }
       },
       "required": ["name", "email", "message", "createdAt"]
+    },
+    "Profile": {
+      "title": "User Profile",
+      "description": "Global profile data including the profile image.",
+      "type": "object",
+      "properties": {
+        "imageUrl": {
+          "type": "string",
+          "description": "Base64 encoded image or URL"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Last update timestamp"
+        }
+      },
+      "required": ["imageUrl", "updatedAt"]
     }
   },
   "firestore": {
     "messages/{messageId}": {
       "schema": "Message",
       "description": "Collection of contact messages"
+    },
+    "profile/main": {
+      "schema": "Profile",
+      "description": "The main portfolio profile data"
     }
   }
 }

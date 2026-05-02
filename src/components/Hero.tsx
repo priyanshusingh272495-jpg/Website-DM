@@ -1,7 +1,55 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'motion/react';
+import { db, handleFirestoreError, OperationType } from '../firebase';
+import { doc, getDoc, onSnapshot } from 'firebase/firestore';
+import { Camera, RefreshCw } from 'lucide-react';
 
 export default function Hero() {
+  const [profileData, setProfileData] = useState<{ imageUrl?: string } | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // Listen to profile data in real-time
+    const profileRef = doc(db, 'profile', 'main');
+    const unsubscribe = onSnapshot(profileRef, (doc) => {
+      if (doc.exists()) {
+        setProfileData(doc.data());
+      }
+      setLoading(false);
+    }, (error) => {
+      handleFirestoreError(error, OperationType.GET, 'profile/main');
+      setLoading(false);
+    });
+
+    return () => unsubscribe();
+  }, []);
+
+  const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    // In a production app, we would use Firebase Storage.
+    // For this demonstration, we store as a base64 string in Firestore.
+    // NOTE: Large images (>1MB) will fail due to Firestore document limits.
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = async () => {
+      const base64String = reader.result as string;
+      try {
+        const { setDoc } = await import('firebase/firestore');
+        await setDoc(doc(db, 'profile', 'main'), {
+          imageUrl: base64String,
+          updatedAt: new Date()
+        }, { merge: true });
+        alert('Profile image uploaded to Firestore! (Saved as Base64)');
+      } catch (error) {
+        handleFirestoreError(error, OperationType.UPDATE, 'profile/main');
+      }
+    };
+  };
+
+  const defaultImage = "/src/assets/images/regenerated_image_1777700358930.jpg";
+
   return (
     <section className="relative min-h-screen flex items-center pt-20 overflow-hidden bg-brand-bg dark:bg-slate-950">
       <div className="max-w-7xl mx-auto px-6 sm:px-10 lg:px-16 w-full grid grid-cols-12 gap-6 items-center relative z-10">
@@ -52,11 +100,25 @@ export default function Hero() {
           className="col-span-12 lg:col-span-5 h-[400px] lg:h-[500px] rounded-[2.5rem] overflow-hidden relative group"
         >
           <div className="absolute inset-0 bg-gradient-to-t from-brand-primary/80 to-transparent z-10" />
-          <img 
-            src="/src/assets/images/regenerated_image_1777700358930.jpg" 
-            alt="Priyanshu Singh" 
-            className="w-full h-full object-cover grayscale-[0.2] transition-transform duration-1000 group-hover:scale-105"
-          />
+          
+          {loading ? (
+             <div className="absolute inset-0 flex items-center justify-center bg-slate-100 dark:bg-slate-900">
+                <RefreshCw className="animate-spin text-brand-primary" size={32} />
+             </div>
+          ) : (
+            <img 
+              src={profileData?.imageUrl || defaultImage} 
+              alt="Priyanshu Singh" 
+              className="w-full h-full object-cover grayscale-[0.2] transition-transform duration-1000 group-hover:scale-105"
+            />
+          )}
+
+          {/* Hidden Upload Input */}
+          <label className="absolute top-4 right-4 z-30 cursor-pointer bg-white/20 hover:bg-white/40 backdrop-blur-md p-3 rounded-full transition-all group-hover:opacity-100 opacity-0">
+            <Camera size={20} className="text-white" />
+            <input type="file" className="hidden" accept="image/*" onChange={handleImageUpload} />
+          </label>
+
           <div className="absolute bottom-0 p-8 z-20">
             <p className="text-brand-accent text-xs font-medium mb-1 uppercase tracking-widest">About Me</p>
             <p className="text-white text-base leading-snug font-light italic">
