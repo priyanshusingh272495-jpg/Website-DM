@@ -28,13 +28,13 @@ export const auth = getAuth();
 // Validate Connection to Firestore
 async function testConnection() {
   try {
+    console.log('Testing Firebase connection...');
     await getDocFromServer(doc(db, 'test', 'connection'));
     console.log('Firebase connection established successfully.');
   } catch (error) {
+    console.error('Firebase Connection Error Details:', error);
     if (error instanceof Error && error.message.includes('the client is offline')) {
-      console.error('Please check your Firebase configuration or internet connection.');
-    } else {
-      console.error('Error connecting to Firebase:', error);
+      console.error('Please check your Firebase configuration (API Key, Project ID) or internet connection.');
     }
   }
 }
