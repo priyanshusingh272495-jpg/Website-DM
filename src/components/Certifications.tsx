@@ -8,7 +8,7 @@ export default function Certifications() {
       title: "Human Values & Professional Ethics (HVPE)",
       issuer: "Hoping Minds / SWAYAM Plus",
       date: "May 2026",
-      image: "https://images.unsplash.com/photo-1589330694653-ded6df03f754?q=80&w=1974&auto=format&fit=crop", 
+      image: "/src/assets/images/regenerated_image_1777700281590.jpg", 
       link: "#"
     }
   ];

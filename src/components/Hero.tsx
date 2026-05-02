@@ -53,7 +53,7 @@ export default function Hero() {
         >
           <div className="absolute inset-0 bg-gradient-to-t from-brand-primary/80 to-transparent z-10" />
           <img 
-            src="https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?q=80&w=1974&auto=format&fit=crop" 
+            src="/src/assets/images/regenerated_image_1777700358930.jpg" 
             alt="Priyanshu Singh" 
             className="w-full h-full object-cover grayscale-[0.2] transition-transform duration-1000 group-hover:scale-105"
           />
