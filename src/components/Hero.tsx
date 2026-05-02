@@ -23,7 +23,7 @@ export default function Hero() {
           </h1>
           
           <p className="text-slate-500 dark:text-slate-400 text-sm md:text-base leading-relaxed mb-8 max-w-md">
-            Helping brands grow through data-driven storytelling and precision-engineered marketing campaigns. Currently focusing on creative narrative and performance analytics.
+            I am Priyanshu Singh from Panipat, currently pursuing my BCA from Geeta University. I blend technical computer applications knowledge with digital marketing strategy.
           </p>
           
           <div className="flex gap-3">
@@ -53,8 +53,8 @@ export default function Hero() {
         >
           <div className="absolute inset-0 bg-gradient-to-t from-brand-primary/80 to-transparent z-10" />
           <img 
-            src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?q=80&w=1974&auto=format&fit=crop" 
-            alt="Profile" 
+            src="https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?q=80&w=1974&auto=format&fit=crop" 
+            alt="Priyanshu Singh" 
             className="w-full h-full object-cover grayscale-[0.2] transition-transform duration-1000 group-hover:scale-105"
           />
           <div className="absolute bottom-0 p-8 z-20">
