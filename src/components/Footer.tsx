@@ -18,8 +18,18 @@ export default function Footer() {
     try {
       const provider = new GoogleAuthProvider();
       await signInWithPopup(auth, provider);
-    } catch (error) {
+    } catch (error: any) {
       console.error('Login failed:', error);
+      if (error?.code === 'auth/unauthorized-domain') {
+        alert(
+          "Domain Not Authorized\n\n" +
+          "Please add these domains to your Firebase Console (Authentication -> Settings -> Authorized Domains):\n" +
+          "1. ais-dev-ab6tmnbuzp5l22p2mshsfk-282602647806.asia-east1.run.app\n" +
+          "2. website-dm.vercel.app"
+        );
+      } else {
+        alert("Login failed: " + (error?.message || "Unknown error"));
+      }
     }
   };
 
