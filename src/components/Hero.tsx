@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'motion/react';
-import { db, handleFirestoreError, OperationType } from '../firebase';
+import { db, handleFirestoreError, OperationType, auth } from '../firebase';
 import { doc, getDoc, onSnapshot } from 'firebase/firestore';
 import { Camera, RefreshCw } from 'lucide-react';
 
