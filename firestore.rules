@@ -3,11 +3,8 @@ service cloud.firestore {
   match /databases/{database}/documents {
     // 1. Path-specific rules take precedence.
     
-    match /certifications/{certId} {
-      allow read: if true;
-      allow write: if request.auth != null && 
-        (request.auth.uid == "PWx7sxyTJHSBv8GwP7hE8ne6n3h2" || 
-         request.auth.token.email == "priyanshusingh272495@gmail.com");
+    match /certifications/{docId} {
+      allow read, write: if request.auth != null;
     }
 
     match /profile/{docId} {
