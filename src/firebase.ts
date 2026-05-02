@@ -3,14 +3,15 @@ import { getAuth } from 'firebase/auth';
 import { getFirestore, doc, getDocFromServer } from 'firebase/firestore';
 import { getAnalytics, isSupported } from 'firebase/analytics';
 
+// Standard config from your snippet
 const firebaseConfig = {
-  apiKey: import.meta.env.VITE_FIREBASE_API_KEY || "AIzaSyCHymPnnaFDEb-bBHk4cNnWN7aqZ4g-WQc",
-  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || "assesment-9f845.firebaseapp.com",
-  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID || "assesment-9f845",
-  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET || "assesment-9f845.firebasestorage.app",
-  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID || "383708447107",
-  appId: import.meta.env.VITE_FIREBASE_APP_ID || "1:383708447107:web:980fc19d350dbca4b4b6b6",
-  measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID || "G-81XPNS1D42"
+  apiKey: "AIzaSyCHymPnnaFDEb-bBHk4cNnWN7aqZ4g-WQc",
+  authDomain: "assesment-9f845.firebaseapp.com",
+  projectId: "assesment-9f845",
+  storageBucket: "assesment-9f845.firebasestorage.app",
+  messagingSenderId: "383708447107",
+  appId: "1:383708447107:web:980fc19d350dbca4b4b6b6",
+  measurementId: "G-81XPNS1D42"
 };
 
 const app = initializeApp(firebaseConfig);
