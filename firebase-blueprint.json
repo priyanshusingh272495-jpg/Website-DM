@@ -42,6 +42,19 @@
         }
       },
       "required": ["imageUrl", "updatedAt"]
+    },
+    "Certification": {
+      "title": "Certification",
+      "description": "Details about a professional certification",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "issuer": { "type": "string" },
+        "date": { "type": "string" },
+        "imageUrl": { "type": "string" },
+        "link": { "type": "string" }
+      },
+      "required": ["title", "issuer", "date", "imageUrl"]
     }
   },
   "firestore": {
@@ -52,6 +65,10 @@
     "profile/main": {
       "schema": "Profile",
       "description": "The main portfolio profile data"
+    },
+    "certifications/{certId}": {
+      "schema": "Certification",
+      "description": "Collection of certifications"
     }
   }
 }

@@ -38,6 +38,11 @@ service cloud.firestore {
       allow write: if isAdmin();
     }
 
+    match /certifications/{certId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
     match /messages/{messageId} {
       allow create: if isValidId(messageId) && isValidMessage(incoming());
       allow read, update, delete: if isAdmin();
