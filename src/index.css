@@ -1,0 +1,37 @@
+@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap');
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Playfair Display", ui-serif, Georgia, serif;
+
+  --color-brand-primary: #4f46e5; /* indigo-600 */
+  --color-brand-secondary: #818cf8; /* indigo-400 */
+  --color-brand-bg: #f8f9ff;
+  --color-brand-accent: #eef2ff; /* indigo-50 */
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply font-sans text-slate-800 bg-brand-bg dark:bg-slate-950 dark:text-slate-50 transition-colors duration-300;
+  }
+}
+
+.editorial-card {
+  @apply bg-white dark:bg-slate-900 rounded-[2rem] p-8 shadow-sm border border-slate-100 dark:border-slate-800 transition-all duration-300 hover:shadow-md;
+}
+
+.editorial-label {
+  @apply inline-block px-3 py-1 bg-brand-accent dark:bg-indigo-900/30 text-brand-primary text-[10px] font-bold uppercase tracking-[0.2em] rounded-full mb-4;
+}
+
+.gradient-text {
+  @apply bg-clip-text text-transparent bg-gradient-to-r from-brand-primary to-brand-secondary;
+}
+
+.soft-gradient {
+  @apply bg-gradient-to-br from-brand-bg via-white to-[#fdfdff] dark:from-slate-900 dark:via-slate-950 dark:to-slate-900;
+}
