@@ -1,27 +1,15 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    // 1. Path-specific rules take precedence.
-    
-    match /certifications/{docId} {
-      allow read, write: if request.auth != null;
+    match /certifications/{docId=**} {
+      allow read, write: if true;
     }
-
-    match /profile/{docId} {
-      allow read: if true;
-      allow write: if request.auth != null && 
-        (request.auth.uid == "PWx7sxyTJHSBv8GwP7hE8ne6n3h2" || 
-         request.auth.token.email == "priyanshusingh272495@gmail.com");
+    match /profile/{docId=**} {
+      allow read, write: if true;
     }
-
-    match /messages/{messageId} {
-      allow create: if true;
-      allow read, write: if request.auth != null && 
-        (request.auth.uid == "PWx7sxyTJHSBv8GwP7hE8ne6n3h2" || 
-         request.auth.token.email == "priyanshusingh272495@gmail.com");
+    match /messages/{docId=**} {
+      allow read, write: if true;
     }
-
-    // 2. Default Deny
     match /{document=**} {
       allow read, write: if false;
     }
