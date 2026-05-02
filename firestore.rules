@@ -1,59 +1,30 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    // Helpers
-    function isSignedIn() {
-      return request.auth != null;
-    }
-
-    function isAdmin() {
-      return isSignedIn() && (
-        request.auth.token.email == "priyanshusingh272495@gmail.com" ||
-        request.auth.uid == "PWx7sxyTJHSBv8GwP7hE8ne6n3h2" ||
-        exists(/databases/$(database)/documents/admins/$(request.auth.uid))
-      );
-    }
-
-    function isValidId(id) {
-      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
-    }
-
-    function incoming() {
-      return request.resource.data;
-    }
-
-    // Message Validation
-    function isValidMessage(data) {
-      return data.keys().hasAll(['name', 'email', 'message', 'createdAt']) &&
-             data.keys().size() == 4 &&
-             data.name is string && data.name.size() > 0 && data.name.size() <= 100 &&
-             data.email is string && data.email.size() > 0 && data.email.size() <= 100 &&
-             data.email.matches('^[^@]+@[^@]+\\.[^@]+$') &&
-             data.message is string && data.message.size() > 0 && data.message.size() <= 5000 &&
-             data.createdAt == request.time;
-    }
-
-    // Collection Rules
-    match /profile/{document} {
-      allow read: if true;
-      allow write: if isAdmin();
-    }
-
+    // 1. Path-specific rules take precedence.
+    
     match /certifications/{certId} {
       allow read: if true;
-      allow write: if isAdmin();
+      allow write: if request.auth != null && 
+        (request.auth.uid == "PWx7sxyTJHSBv8GwP7hE8ne6n3h2" || 
+         request.auth.token.email == "priyanshusingh272495@gmail.com");
+    }
+
+    match /profile/{docId} {
+      allow read: if true;
+      allow write: if request.auth != null && 
+        (request.auth.uid == "PWx7sxyTJHSBv8GwP7hE8ne6n3h2" || 
+         request.auth.token.email == "priyanshusingh272495@gmail.com");
     }
 
     match /messages/{messageId} {
-      allow create: if isValidId(messageId) && isValidMessage(incoming());
-      allow read, update, delete: if isAdmin();
-    }
-    
-    match /admins/{adminId} {
-      allow read: if isSignedIn() && request.auth.uid == adminId;
+      allow create: if true;
+      allow read, write: if request.auth != null && 
+        (request.auth.uid == "PWx7sxyTJHSBv8GwP7hE8ne6n3h2" || 
+         request.auth.token.email == "priyanshusingh272495@gmail.com");
     }
 
-    // Default Deny
+    // 2. Default Deny
     match /{document=**} {
       allow read, write: if false;
     }

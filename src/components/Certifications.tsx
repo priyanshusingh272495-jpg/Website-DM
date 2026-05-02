@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'motion/react';
 import { ExternalLink, CheckCircle2, Camera, RefreshCw } from 'lucide-react';
 import { db, auth, handleFirestoreError, OperationType } from '../firebase';
-import { collection, onSnapshot, doc, setDoc } from 'firebase/firestore';
+import { collection, onSnapshot, doc, setDoc, serverTimestamp } from 'firebase/firestore';
 
 interface CertificationType {
   id?: string;
@@ -62,13 +62,21 @@ export default function Certifications() {
       const base64String = reader.result as string;
       try {
         const certRef = doc(db, 'certifications', certId);
-        // Find existing cert to keep other fields
+        // Find existing cert to keep other fields, or use default as fallback
         const existingCert = certs.find(c => c.id === certId) || defaultCerts.find(c => c.id === certId);
+        
+        if (!existingCert) {
+          throw new Error("Certification template not found");
+        }
+
+        const { id, ...dataToSave } = existingCert;
+        
         await setDoc(certRef, {
-          ...existingCert,
+          ...dataToSave,
           imageUrl: base64String,
-          updatedAt: new Date()
+          updatedAt: serverTimestamp()
         }, { merge: true });
+        
         alert('Certification image updated!');
       } catch (error) {
         handleFirestoreError(error, OperationType.UPDATE, `certifications/${certId}`);
@@ -108,7 +116,7 @@ export default function Certifications() {
                    <img 
                     src={cert.imageUrl} 
                     alt={cert.title} 
-                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                    className="absolute inset-0 w-full h-full object-cover grayscale-[0.2] transition-transform duration-700 group-hover:scale-110"
                     referrerPolicy="no-referrer"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent" />
