@@ -28,20 +28,15 @@ export const auth = getAuth();
 // Validate Connection to Firestore
 async function testConnection() {
   try {
-    await getDocFromServer(doc(db, 'test', 'connection'));
-    console.log('Firebase connection established successfully.');
+    // Attempting to read a public document to verify connectivity
+    const { getDoc } = await import('firebase/firestore');
+    await getDoc(doc(db, 'profile', 'main'));
+    console.log('Firebase connection initialized.');
   } catch (error: any) {
-    // If we get a permission-denied error, it actually means we successfully
-    // contacted the Firestore server and it evaluated our rules.
-    if (error?.code === 'permission-denied' || (error instanceof Error && error.message.includes('insufficient permissions'))) {
-      console.log('Firebase connection established (Rules are active).');
-      return;
-    }
-
     if (error instanceof Error && error.message.includes('the client is offline')) {
-      console.error('Please check your Firebase configuration (API Key, Project ID) or internet connection.');
-    } else {
-      console.error('Firebase Connection Error Details:', error);
+      console.error('Firebase is offline. Check connection.');
+    } else if (error?.code !== 'permission-denied') {
+      console.warn('Firebase setup note:', error?.message || error);
     }
   }
 }

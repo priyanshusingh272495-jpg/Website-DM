@@ -11,13 +11,14 @@ export default function Hero() {
   useEffect(() => {
     // Listen to profile data in real-time
     const profileRef = doc(db, 'profile', 'main');
-    const unsubscribe = onSnapshot(profileRef, (doc) => {
-      if (doc.exists()) {
-        setProfileData(doc.data());
+    const unsubscribe = onSnapshot(profileRef, (docSnap) => {
+      if (docSnap.exists()) {
+        setProfileData(docSnap.data());
       }
       setLoading(false);
     }, (error) => {
-      handleFirestoreError(error, OperationType.GET, 'profile/main');
+      // For public reading, we just log instead of throwing to avoid crashing the view
+      console.warn('Profile read note:', error.message);
       setLoading(false);
     });
 
@@ -28,9 +29,11 @@ export default function Hero() {
     const file = event.target.files?.[0];
     if (!file) return;
 
-    // In a production app, we would use Firebase Storage.
-    // For this demonstration, we store as a base64 string in Firestore.
-    // NOTE: Large images (>1MB) will fail due to Firestore document limits.
+    if (!auth.currentUser) {
+      alert("Please log in as an admin (via the link in the footer) to change the profile image.");
+      return;
+    }
+
     const reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onload = async () => {
@@ -41,7 +44,7 @@ export default function Hero() {
           imageUrl: base64String,
           updatedAt: new Date()
         }, { merge: true });
-        alert('Profile image uploaded to Firestore! (Saved as Base64)');
+        alert('Profile image updated successfully!');
       } catch (error) {
         handleFirestoreError(error, OperationType.UPDATE, 'profile/main');
       }
