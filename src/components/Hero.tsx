@@ -17,9 +17,9 @@ export default function Hero() {
           
           <span className="editorial-label">Aspiring Digital Marketer</span>
           
-          <h1 className="text-5xl md:text-7xl font-extrabold text-slate-900 dark:text-white leading-[1.1] mb-6">
+          <h1 className="text-5xl md:text-7xl font-extrabold text-black dark:text-white leading-[1.1] mb-6">
             Hi, I'm <br />
-            <span className="gradient-text">Priyanshu Singh</span>
+            <span className="text-black">Priyanshu Singh</span>
           </h1>
           
           <p className="text-slate-500 dark:text-slate-400 text-sm md:text-base leading-relaxed mb-8 max-w-md">
